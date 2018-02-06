@@ -1,4 +1,4 @@
-##설정과 초기화
+## 설정과 초기화
 > 전역사용자명/이메일 구성
 
     git config --global user.name `Your Name` 
