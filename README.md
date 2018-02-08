@@ -168,3 +168,5 @@
     // in Terminal
     node
     this === global // true
+    
+> dd
