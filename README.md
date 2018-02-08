@@ -169,4 +169,54 @@
     node
     this === global // true
     
-> dd
+### 삼항연산자 (Ternary Operator)
+    
+    // 삼항연산자(ternary operator)
+    // 조건 ? 조건이 ture일때 반환할 값 : 조건이 false일때 반환할 값
+    var condition = true;
+    var result = condition ? 'true' : 'false';
+    console.log(result); // 'true'
+    
+### 타입연산자 (Type Operator)
+
+    typeof 피연산자의 데이터 타입(자료형)을 문자열로 반환한다. nill과 배열의 경우 object, 함수의 경우 function를 반환하는 것에 유의하여야 한다.
+    instanceof 객체가 동일 객체형의 인스턴스이면 true를 반환한다.
+    
+    console.log(typeof 'John');                 // string
+    console.log(typeof 3.14);                   // number
+    console.log(typeof NaN);                    // number
+    console.log(typeof false);                  // boolean
+    console.log(typeof [1, 2, 3, 4]);           // object
+    console.log(typeof {name:'John', age:34});  // object
+    console.log(typeof new Date());             // object
+    console.log(typeof function () {});         // function
+    console.log(typeof myCar);                  // undefined (설계적 결함)
+    console.log(typeof null);                   // object (설계적 결함)
+    
+    function Person() {}
+    var me = new Person();
+    console.log(me instanceof Person); // true
+    
+### !!
+> !! 의 역할은 피연사자를 불린값으로 변환하는 것이다.
+
+    console.log(!!1);         // true
+    console.log(!!0);         // false
+    console.log(!!'string');  // true
+    console.log(!!'');        // false
+    console.log(!!null);      // false
+    console.log(!!undefined); // false
+    console.log(!!{});        // true
+    console.log(!![]);        // true
+    
+> 객체(배열 포함)의 경우 빈 객체라도 존재하기만하면 true로 변환된다.
+  
+> 객체의 존재 확인 후 그 결과를 반환해야 하는 경우, !!를 사용하면 강제로 피연산자를 boolean으로 형 변환 할 수 있다.
+    
+    var obj;
+    console.log(!!obj); // false
+    
+    obj = {};
+    console.log(!!obj); // true
+    
+
