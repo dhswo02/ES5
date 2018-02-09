@@ -159,7 +159,7 @@
 > 함수 호출 패턴
 <br/><br/>1. 함수 호출 패턴<br/>2. 메소드 호출 패턴<br/>3. 생성자 호출 패턴<br/>4. apply 호출 패턴
 
-### 1. 함수 호출 패턴
+### 1. 함수 호출 패턴 (Function Invocation Pattern)
 > 전역객체(Global Object)는 모든 객체의 유일한 최상위 객체를 의미하며 일반적으로 Browser-side에서는 window, Server-side(Node.js)에서는 global 객체를 의미한다.
 
     // in browser console
@@ -169,7 +169,7 @@
     node
     this === global // true
 
-> 기본적으로 this 는 전역객체(Global object)에 바인딩된다. 전역함수는 물론이고 심지어 내부함수의 경우도 this는 외부함수가 아닌 전역객체에 바인딩된다.
+ 기본적으로 this 는 전역객체(Global object)에 바인딩된다. 전역함수는 물론이고 심지어 내부함수의 경우도 this는 외부함수가 아닌 전역객체에 바인딩된다.
     
     function foo() {
       console.log("foo's this: ",  this);  // window
@@ -180,7 +180,7 @@
     }
     foo();
     
-> 또한 메소드의 내부함수일 경우에도 this 는 전역객체에 바인딩된다.
+ 또한 메소드의 내부함수일 경우에도 this 는 전역객체에 바인딩된다.
     
     var value = 1;
     
@@ -199,7 +199,7 @@
     
     obj.foo();
     
-> 콜백함수의 경우에도 this는 전역객체에 바인딩된다.
+ 콜백함수의 경우에도 this는 전역객체에 바인딩된다.
   
     var value = 1;
     
@@ -215,7 +215,7 @@
     
     obj.foo();
     
-> 더글라스 크락포드는 “이것은 설계 단계의 결함으로 메소드가 내부함수를 사용하여 자신의 작업을 돕게 할 수 없다는 것을 의미한다” 라고 말한다. 내부함수의 this가 전역객체를 참조하는 것을 회피방법은 아래와 같다.
+ 더글라스 크락포드는 “이것은 설계 단계의 결함으로 메소드가 내부함수를 사용하여 자신의 작업을 돕게 할 수 없다는 것을 의미한다” 라고 말한다. 내부함수의 this가 전역객체를 참조하는 것을 회피방법은 아래와 같다.
 
     var value = 1;
     
@@ -239,7 +239,48 @@
     
     obj.foo();
     
-<img src="http://poiemaweb.com/img/Function_Invocation_Pattern.png">    
+ <img src="http://poiemaweb.com/img/Function_Invocation_Pattern.png">    
+
+ 메소드 호출 패턴이든 함수 호출 패턴이든 내부함수의 this는 모두 전역객체에 바인딩된다. 이러한 문제를 해소하기 위해 자바스크립트는 this 바인딩을 명시적으로 할 수 있는 call, apply 메소드를 제공한다.
+
+### 2. 메소드 호출 패턴 (Method Invocation Pattern)
+> 함수가 객체의 프로퍼티이면 메소드 호출 패턴으로 호출된다. 이때 메소드 내부의 this는 해당 메소드를 소유한 객체 즉 해당 메소드를 호출한 객체에 바인딩된다.
+
+    var obj1 = {
+      name: 'Lee',
+      sayName: function() {
+        console.log(this.name);
+      }
+    }
+    
+    var obj2 = {
+      name: 'Kim'
+    }
+    
+    obj2.sayName = obj1.sayName;
+    
+    obj1.sayName();
+    obj2.sayName();
+
+ <img src="http://poiemaweb.com/img/Method_Invocation_Pattern.png">
+
+ 프로토타입 객체도 메소드를 가질 수 있다. 프로토타입 객체 메소드 내부에서 사용된 this도 일반 메소드 방식과 마찬가지로 해당 메소드를 호출한 객체에 바인딩된다.    
+
+    function Person(name) {
+      this.name = name;
+    }
+    
+    Person.prototype.getName = function() {
+      return this.name;
+    }
+    
+    var me = new Person('Lee');
+    console.log(me.getName());
+    
+    Person.prototype.name = 'Kim';
+    console.log(Person.prototype.getName());
+    
+<img src="http://poiemaweb.com/img/prototype_metthod_invocation_pattern.png">
 
 ## 연산자 (Operator)
 ### 삼항연산자 (Ternary Operator)
@@ -282,9 +323,9 @@
     console.log(!!{});        // true
     console.log(!![]);        // true
     
-> 객체(배열 포함)의 경우 빈 객체라도 존재하기만하면 true로 변환된다.
+ 객체(배열 포함)의 경우 빈 객체라도 존재하기만하면 true로 변환된다.
   
-> 객체의 존재 확인 후 그 결과를 반환해야 하는 경우, !!를 사용하면 강제로 피연산자를 boolean으로 형 변환 할 수 있다.
+ 객체의 존재 확인 후 그 결과를 반환해야 하는 경우, !!를 사용하면 강제로 피연산자를 boolean으로 형 변환 할 수 있다.
     
     var obj;
     console.log(!!obj); // false
@@ -293,7 +334,7 @@
     console.log(!!obj); // true
     
 
-> 아래 값들은 Boolean context에서 false로 평가된다.<ul><li>false</li><li>undefined</li><li>null</li><li>0</li><li>NaN (Not a Number)</li><li>'' (빈문자열)</li></ul>
+ 아래 값들은 Boolean context에서 false로 평가된다.<ul><li>false</li><li>undefined</li><li>null</li><li>0</li><li>NaN (Not a Number)</li><li>'' (빈문자열)</li></ul>
 이들을 Falsy value라 한다.  
 
 ## 객체(Object)란?
