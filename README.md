@@ -168,7 +168,80 @@
     // in Terminal
     node
     this === global // true
+
+> 기본적으로 this 는 전역객체(Global object)에 바인딩된다. 전역함수는 물론이고 심지어 내부함수의 경우도 this는 외부함수가 아닌 전역객체에 바인딩된다.
     
+    function foo() {
+      console.log("foo's this: ",  this);  // window
+      function bar() {
+        console.log("bar's this: ", this); // window
+      }
+      bar();
+    }
+    foo();
+    
+> 또한 메소드의 내부함수일 경우에도 this 는 전역객체에 바인딩된다.
+    
+    var value = 1;
+    
+    var obj = {
+      value: 100,
+      foo: function() {
+        console.log("foo's this: ",  this);  // obj
+        console.log("foo's this.value: ",  this.value); // 100
+        function bar() {
+          console.log("bar's this: ",  this); // window
+          console.log("bar's this.value: ", this.value); // 1
+        }
+        bar();
+      }
+    };
+    
+    obj.foo();
+    
+> 콜백함수의 경우에도 this는 전역객체에 바인딩된다.
+  
+    var value = 1;
+    
+    var obj = {
+      value: 100,
+      foo: function() {
+        setTimeout(function() {
+          console.log("callback's this: ",  this);  // window
+          console.log("callback's this.value: ",  this.value); // 1
+        }, 100);
+      }
+    };
+    
+    obj.foo();
+    
+> 더글라스 크락포드는 “이것은 설계 단계의 결함으로 메소드가 내부함수를 사용하여 자신의 작업을 돕게 할 수 없다는 것을 의미한다” 라고 말한다. 내부함수의 this가 전역객체를 참조하는 것을 회피방법은 아래와 같다.
+
+    var value = 1;
+    
+    var obj = {
+      value: 100,
+      foo: function() {
+        var that = this;  // Workaround : this === obj
+    
+        console.log("foo's this: ",  this);  // obj
+        console.log("foo's this.value: ",  this.value); // 100
+        function bar() {
+          console.log("bar's this: ",  this); // window
+          console.log("bar's this.value: ", this.value); // 1
+    
+          console.log("bar's that: ",  that); // obj
+          console.log("bar's that.value: ", that.value); // 100
+        }
+        bar();
+      }
+    };
+    
+    obj.foo();
+    
+<img src="http://poiemaweb.com/img/Function_Invocation_Pattern.png">    
+
+## 연산자 (Operator)
 ### 삼항연산자 (Ternary Operator)
     
     // 삼항연산자(ternary operator)
@@ -219,4 +292,16 @@
     obj = {};
     console.log(!!obj); // true
     
+
+> 아래 값들은 Boolean context에서 false로 평가된다.<ul><li>false</li><li>undefined</li><li>null</li><li>0</li><li>NaN (Not a Number)</li><li>'' (빈문자열)</li></ul>
+이들을 Falsy value라 한다.  
+
+## 객체(Object)란?
+> 객체는 데이터와 그 데이터에 관련되는 동작(절차, 방법, 기능)을 모두 포함할 수 있는 개념적 존재이다. 달리 말해, 이름(키)과 값으로 구성된 데이터를 의미하는 프로퍼티(property)와 동작을 나타내는 메소드(method)를 포함하고 있는 독립적 주체이다.
+
+### 프로퍼티(Property)
+> 객체는 이름(name)과 값(value)의 쌍인 프로퍼티들을 포함하는 컨테이너라고 할 수 있다.<ul><li>프로퍼티 이름 : 빈 문자열을 포함하는 문자열과 숫자</li><li>프로퍼티 값 : undefined을 제외한 모든 값</li></ul> 
+
+### 메소드(Method)
+> 메소드는 객체에 제한되어 있는 함수를 의미한다. 즉 프로퍼티 값이 함수일 경우, 일반 함수와 구분하기 위해 메소드라 칭한다.
 
