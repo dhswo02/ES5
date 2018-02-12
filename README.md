@@ -45,9 +45,9 @@
 #
 
 ## 변수 호이스팅
-*var 키워드로 선언된 변수는 선언 단계와 초기화 단계가 한번에 이루어진다. 즉, 스코프에 변수가 등록되고 변수는 메모리에 공간을 확보한 후 undefined로 초기화된다. 따라서 변수 선언문 이전에 변수에 접근하여도 Variable Object에 변수가 존재하기 때문에 에러가 발생하지 않는다. 다만 undefined 를 반환한다. 이러한 현상을 변수 호이스팅(Variable Hoisting)*
+*var 키워드로 선언된 변수는 선언 단계와 초기화 단계가 한번에 이루어진다. 즉, 스코프에 변수가 등록되고 변수는 메모리에 공간을 확보한 후 undefined 로 초기화된다. 따라서 변수 선언문 이전에 변수에 접근하여도 Variable Object 에 변수가 존재하기 때문에 에러가 발생하지 않는다. 다만 undefined 를 반환한다. 이러한 현상을 변수 호이스팅(Variable Hoisting)*
  
-*JavaScript의 변수는 다른 C-family와는 달리 block-level scope를 가지지 않고 function-level scope를 갖는다. 단, ECMAScript 6에서 도입된 let, const 키워드를 사용하면 block-level scope를 사용할 수 있다.*
+*JavaScript 의 변수는 다른 C-family 와는 달리 block-level scope 를 가지지 않고 function-level scope 를 갖는다. 단, ECMAScript 6에서 도입된 let, const 키워드를 사용하면 block-level scope 를 사용할 수 있다.*
  
     Function-level scope
     함수내에서 선언된 변수는 함수 내에서만 유효하며 함수 외부에서는 참조할 수 없다. 즉, 함수 내부에서 선언한 변수는 지역 변수이며 함수 외부에서 선언한 변수는 모두 전역 변수이다.
@@ -148,7 +148,7 @@
 #
 
 ## this
-> 자바스크립트의 함수는 호출될 때, 매개변수로 전달되는 인자값 이외에, arguments 객체와 this를 암묵적으로 전달 받는다.
+> 자바스크립트의 함수는 호출될 때, 매개변수로 전달되는 인자값 이외에, arguments 객체와 this 를 암묵적으로 전달 받는다.
 
     function square(number) {
     
@@ -375,7 +375,7 @@ this에 바인딩될 객체는 함수 호출 패턴에 의해 결정된다. 이�
     
     console.log(foo); // { name: 'name' }
     
-빈 객체 foo를 apply() 메소드의 첫번째 매개변수에, argument의 배열을 두번째 매개변수에 전달하면서 Person 함수를 호출하였다. 이때 Person 함수의 this는 foo 객체가 된다. Person 함수는 this의 name 프로퍼티에 매개변수 name에 할당된 인수를 할당하는데 this에 바인딩된 foo 객체에는 name 프로퍼티가 없으므로 name 프로퍼티가 동적 추가되고 값이 할당된다.
+빈 객체 foo 를 apply() 메소드의 첫번째 매개변수에, argument 의 배열을 두번째 매개변수에 전달하면서 Person 함수를 호출하였다. 이때 Person 함수의 this는 foo 객체가 된다. Person 함수는 this의 name 프로퍼티에 매개변수 name에 할당된 인수를 할당하는데 this에 바인딩된 foo 객체에는 name 프로퍼티가 없으므로 name 프로퍼티가 동적 추가되고 값이 할당된다.
 
 apply() 메소드의 대표적인 용도는 arguments 객체와 같은 유사 배열 객체에 배열 메소드를 사용하는 경우이다. arguments 객체는 배열이 아니기 때문에 slice() 같은 배열의 메소드를 사용할 수 없으나 apply() 메소드를 이용하면 가능하다.
 
@@ -581,4 +581,306 @@ Object() 생성자 함수 방식은 특별한 이유가 없다면 그다지 유�
 - 프로퍼티 또는 메소드명 앞에 기술한 this 는 생성자 함수가 생성할 인스턴스(instance)를 가리킨다.
 - this 에 연결(바인딩)되어 있는 프로퍼티와 메소드는 public(외부에서 참조 가능)하다.
 - 생성자 함수 내에서 선언된 일반 변수는 private(외부에서 참조 불가능)하다. 즉 생성자 함수 내부에서는 자유롭게 접근이 가능하나 외부에서 접근할 수 없다.
+
+
+## 3 객체와 변경불가성 (Immutability)
+*Immutability(변경불가성)는 객체가 생성된 이후 그 상태를 변경할 수 없는 디자인 패턴을 의미한다. Immutability 은 함수형 프로그래밍의 핵심 원리이다.*
+
+### 3.1 immutable value vs. mutable value
+Javascript 의 기본 자료형(primitive data type)은 변경 불가능한 값(immutable value)이다.
+- Boolean
+- null
+- undefined
+- Number
+- String
+- Symbol (New in ECMAScript 6)
+
+기본 자료형 이외의 모든 값은 객체(Object) 타입이며 객체 타입은 변경 가능한 값(mutable value)이다. 즉 객체는 새로운 값을 다시 만들 필요없이 직접 변경이 가능하다는 것이다.
+
+Javascript 의 문자열은 변경 불가능한 값(immutable value) 이다. 이런 값을 “primitive values” 라 한다. (변경이 불가능하다는 뜻은 메모리 영역에서의 변경이 불가능하다는 뜻이다. 재할당은 가능하다)
+
+### 3.2 불변 데이터 패턴(immutable data pattern) (new in ECMAScript 6)
+- 객체의 방어적 복사(defensive copy)
+
+     Object.assign
+     
+Object.assign 은 타킷 객체로 소스 객체의 프로퍼티를 복사한다. 이때 소스 객체의 프로퍼티와 동일한 프로퍼티를 가진 타켓 객체의 프로퍼티들은 소스 객체의 프로퍼티로 덮어쓰기된다. 리턴값으로 타킷 객체를 반환한다. ES6에서 추가된 메소드이며 Internet Explorer는 지원하지 않는다.
+
+    // Syntax
+    Object.assign(target, ...sources)
+    
+    // Copy
+    const obj = { a: 1 };
+    const copy = Object.assign({}, obj);
+    console.log(copy); // { a: 1 }
+    console.log(obj == copy); // false
+    
+    // Merge
+    const o1 = { a: 1 };
+    const o2 = { b: 2 };
+    const o3 = { c: 3 };
+    
+    const merge1 = Object.assign(o1, o2, o3);
+    
+    console.log(merge1); // { a: 1, b: 2, c: 3 }
+    console.log(o1);     // { a: 1, b: 2, c: 3 }, 타겟 객체가 변경된다!
+    
+    // Merge
+    const o4 = { a: 1 };
+    const o5 = { b: 2 };
+    const o6 = { c: 3 };
+    
+    const merge2 = Object.assign({}, o4, o5, o6);
+    
+    console.log(merge2); // { a: 1, b: 2, c: 3 }
+    console.log(o4);     // { a: 1 }
+
+Object.assign 을 사용하여 기존 객체를 변경하지 않고 객체를 복사(Shallow copy)하여 사용할 수 있다.
+
+    const user1 = {
+      name: 'Lee',
+      address: {
+        city: 'Seoul'
+      }
+    };
+    
+    // Shallow copy
+    const user2 = Object.assign({}, user1); // user1을 {}에 Copy
+    
+    user2.name = 'Kim';
+    
+    // 상기 2행은 아래와 동치이다.
+    // {name: 'Kim'}은 user1에 병합되는 것이 아니라 첫번째 인자인 {}에 병합된다.
+    // const user2 = Object.assign({}, user1, {name: 'Kim'});
+    
+    console.log(user1.name); // Lee
+    console.log(user2.name); // Kim
+    
+- 불변객체화를 통한 객체 변경 방지
+
+    Object.freeze
+    
+Object.freeze()를 사용하여 불변(immutable) 객체로 만들수 있다.
+
+    const user1 = {
+      name: 'Lee',
+      address: {
+        city: 'Seoul'
+      }
+    };
+    
+    // Shallow copy
+    const user2 = Object.assign({}, user1, {name: 'Kim'});
+    
+    console.log(user1.name); // Lee
+    console.log(user2.name); // Kim
+    
+    Object.freeze(user1);
+    
+    user1.name = 'Kim'; // 무시된다!
+    
+    console.log(user1); // { name: 'Lee', address: { city: 'Seoul' } }
+    
+    console.log(Object.isFrozen(user1)); // true
+    
+하지만 객체 내부의 객체(Nested Object)는 변경가능하다.
+
+    const user = {
+      name: 'Lee',
+      address: {
+        city: 'Seoul'
+      }
+    };
+    
+    Object.freeze(user);
+    
+    user.address.city = 'Busan'; // 변경된다!
+    console.log(user); // { name: 'Lee', address: { city: 'Busan' } }
+    
+내부 객체까지 변경 불가능하게 만들려면 Deep freeze 를 하여야 한다.    
+
+    function deepFreeze(obj) {
+      const props = Object.getOwnPropertyNames(obj);
+    
+      props.forEach((name) => {
+        const prop = obj[name];
+        if(typeof prop === 'object' && prop !== null) {
+          deepFreeze(prop);
+        }
+      });
+      return Object.freeze(obj);
+    }
+    
+    const user = {
+      name: 'Lee',
+      address: {
+        city: 'Seoul'
+      }
+    };
+    
+    deepFreeze(user);
+    
+    user.name = 'Kim';           // 무시된다
+    user.address.city = 'Busan'; // 무시된다
+    
+    console.log(user); // { name: 'Lee', address: { city: 'Seoul' } }
+    
+Object.assign 과 Object.freeze 을 사용하여 불변 객체를 만드는 방법은 번거러울 뿐더러 성능상 이슈가 있어서 큰 객체에는 사용하지 않는 것이 좋다.
+
+## 4. 함수 (Function)
+### 4.1 함수선언식(Function declaration)
+    function square(number) {
+      return number * number;
+    }
+
+### 4.2 함수표현식(Function expression)
+자바스크립트의 함수는 *일급 객체*이므로 아래와 같은 특징이 있다.
+
+1. 무명의 리터럴로 표현이 가능하다.
+2. 변수나 자료 구조(객체, 배열…)에 저장할 수 있다.
+3. 함수의 파라미터로 전달할 수 있다.
+4. 반환값(return value)으로 사용할 수 있다.
+
+함수의 일급객체 특성을 이용하여 함수 리터럴 방식으로 함수를 정의하고 변수에 할당할 수 있는데 이러한 방식을 함수표현식(Function expression)이라 한다.
+
+    var square = function(number) {
+      return number * number;
+    };
+    
+함수표현식으로 정의한 함수는 함수명을 생략할 수 있다. 이러한 함수를 익명 함수(anonymous function)이라 한다. 함수표현식에서는 함수명을 생략하는 것이 일반적이다.    
+
+    // 기명 함수표현식(named function expression)
+    var foo = function multiply(a, b) {
+      return a * b;
+    };
+    // 익명 함수표현식(anonymous function expression)
+    var bar = function(a, b) {
+      return a * b;
+    };
+    
+    console.log(foo(10, 5)); // 50
+    console.log(multiply(10, 5)); // Uncaught ReferenceError: multiply is not defined
+    
+함수는 일급객체이기 때문에 변수에 할당할 수 있는데 이 변수는 함수명이 아니라 할당된 함수를 가리키는 참조값을 저장하게 된다. 함수 호출시 함수명이 아니라 함수를 가리키는 변수명을 사용하여야 한다.
+
+### 4.3 함수 호이스팅 (Function Hoisting)
+
+    var res = square(5);
+    
+    function square(number) {
+      return number * number;
+    }
+    
+자바스크립트는 ES6의 let, const 를 포함하여 모든 선언(var, let, const, function, function*, class)을 호이스팅(Hoisting)한다.
+
+호이스팅이란 var 선언문이나 function 선언문 등 모든 선언문이 해당 Scope 의 선두로 옮겨진 것처럼 동작하는 특성을 말한다. 즉 자바스크립트는 모든 선언문(var, let, const, function, function*, class)이 선언되기 이전에 참조 가능하다.
+
+함수선언식으로 정의된 함수는 자바스크립트 엔진이 스크립트가 로딩되는 시점에 바로 초기화하고 이를 VO(variable object)에 저장한다. 즉, *함수 선언, 초기화, 할당이 한번에 이루어진다.* 그렇기 때문에 함수 선언의 위치와는 상관없이 소스 내 어느 곳에서든지 호출이 가능하다.
+
+    var res = square(5); // TypeError: square is not a function
+    
+    var square = function(number) {
+      return number * number;
+    }
+
+함수선언식의 경우와는 달리 TypeError 가 발생하였다. 함수표현식의 경우 함수 호이스팅이 아니라 변수 호이스팅이 발생한다.
+
+*변수 호이스팅은 변수 생성 및 초기화와 할당이 분리되어 진행된다. 호이스팅된 변수는 undefined 로 초기화 되고 실제값의 할당은 할당문에서 이루어진다.*
+
+함수표현식은 함수선언식과는 달리 스크립트 로딩 시점에 변수 객체(VO)에 함수를 할당하지 않고 runtime 에 해석되고 실행되므로 이 두가지를 구분하는 것은 중요하다.
+
+*자바스크립트의 권위자인 더글러스 크락포드(Douglas Crockford)는 이와 같은 문제 때문에 함수표현식만을 사용할 것을 권고하고 있다. 함수 호이스팅이 함수 호출 전 반드시 함수를 선언하여야 한다는 규칙을 무시하므로 코드의 구조를 엉성하게 만들 수 있다고 지적한다.*
+
+*또한 함수선언식으로 함수를 정의하면 사용하기에 쉽지만 대규모 애플리케이션을 개발하는 경우 인터프리터가 너무 많은 코드를 변수 객체(VO)에 저장하므로 애플리케이션의 응답속도는 현저히 떨어질 수 있으므로 주의해야 할 필요가 있다.*
+
+### 4.4 First-class object (일급 객체)
+*일급 객체(first-class object)란 생성, 대입, 연산, 인자 또는 반환값으로서의 전달 등 프로그래밍 언어의 기본적 조작을 제한없이 사용할 수 있는 대상을 의미한다.*
+
+1. 무명의 리터럴로 표현이 가능하다.
+2. 변수나 자료 구조(객체, 배열…)에 저장할 수 있다.
+3. 함수의 파라미터로 전달할 수 있다.
+4. 반환값(return value)으로 사용할 수 있다.
+
+
+    // 1. 무명의 리터럴로 표현이 가능하다.
+    // 2. 변수나 데이터 구조안에 담을 수 있다.
+    var increase = function(num) {
+      return num + 1;
+    };
+    
+    var decrease = function(num){
+      return num - 1;
+    };
+    
+    var obj = {
+      increase: increase,
+      decrease: decrease
+    };
+    
+    // 2. 함수의 파라미터로 전달 할 수 있다.
+    function calc(func, num){
+      return func(num);
+    }
+    
+    console.log(calc(increase, 1));
+    console.log(calc(decrease, 1));
+    
+    // 3. 반환값(return value)으로 사용할 수 있다.
+    function calc(mode){
+      var funcs = {
+        plus:  function(left, right){ return left + right; },
+        minus: function(left, right){ return left - right; }
+      };
+      return funcs[mode];
+    }
+    console.log(calc('plus')(2,1));
+    console.log(calc('minus')(2,1));
+
+## 5. 매개변수(Parameter, 인자)
+*함수의 작업 실행을 위해 추가적인 정보가 필요할 경우, 매개변수를 지정한다. 매개변수는 함수 내에서 변수와 동일하게 동작한다.*
+
+### 5.1 Call-by-value
+Primitives(기본자료형) 인수는 Call-by-value(값에 의한 호출)로 동작한다. 이는 함수 호출 시 기본자료형 인수를 함수에 매개변수로 전달할 때 매개변수에 값을 복사하여 함수로 전달하는 방식이다. 이때 함수 내에서 매개변수를 통해 값이 변경되어도 전달이 완료된 기본자료형 값은 변경되지 않는다.
+
+    function foo(primitive) {
+      primitive += 1;
+      return primitive;
+    }
+    
+    var x = 0;
+    
+    console.log(foo(x)); // 1
+    console.log(x);      // 0
+    
+### 5.2 Call-by-reference
+객체형(참조형) 인수는 Call-by-reference(참조에 의한 호출)로 동작한다. 이는 함수 호출 시 참조 타입 인수를 함수에 매개변수로 전달할 때 매개변수에 값이 복사되지 않고 객체의 참조값이 매개변수에 저장되어 함수로 전달되는 방식이다. 이때 함수 내에서 매개변수의 참조값이 이용하여 객체의 값을 변경했을 때 전달되어진 참조형의 인수값도 같이 변경된다.
+
+    function changeVal(primitive, obj) {
+      primitive += 100;
+      obj.name = 'Kim';
+      obj.gender = 'female';
+    }
+    
+    var num = 100;
+    var obj = {
+      name: 'Lee',
+      gender: 'male'
+    };
+    
+    console.log(num); // 100
+    console.log(obj); // Object {name: 'Lee', gender: 'male'}
+    
+    changeVal(num, obj);
+    
+    console.log(num); // 100
+    console.log(obj); // Object {name: 'Kim', gender: 'female'}
+    
+어떤 외부 상태도 변경하지 않는 함수를 순수함수(Pure function), 외부 상태도 변경시켜는 부수 효과(side-effect)가 발생시키는 함수를 비순수 함수(Impure function)라 한다.
+
+## 6. 반환값 (return value)
+함수는 자신을 호출한 코드에게 수행한 결과를 반환(return)할 수 있다.
+- return 키워드는 함수를 호출한 코드(caller)에게 값을 반환할 때 사용한다.
+- 함수는 배열 등을 이용하여 한 번에 여러 개의 값을 리턴할 수 있다.
+- 함수는 반환을 생략할 수 있다. 이때 함수는 암묵적으로 undefined 를 반환한다.
+- 자바스크립트 해석기는 return 키워드를 만나면 함수의 실행을 중단한 후, 함수를 호출한 코드로 되돌아간다. 만일 return 키워드 이후에 다른 구문이 존재하면 그 구문은 실행되지 않는다.
 
