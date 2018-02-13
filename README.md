@@ -160,13 +160,13 @@
     
     var result = square();
     
- 자바스크립트의 경우 함수 호출 패턴에 따라 어떤 객체를 this에 바인딩할 지가 결정된다. 즉 함수 호출 패턴에 따라 this의 참조값이 달라진다.
+ 자바스크립트의 경우 함수 호출 패턴에 따라 어떤 객체를 this 에 바인딩할 지가 결정된다. 즉 함수 호출 패턴에 따라 this 의 참조값이 달라진다.
 
 > 함수 호출 패턴
 <br/><br/>1. 함수 호출 패턴<br/>2. 메소드 호출 패턴<br/>3. 생성자 호출 패턴<br/>4. apply 호출 패턴
 
 ### 1. 함수 호출 패턴 (Function Invocation Pattern)
-*전역객체(Global Object)는 모든 객체의 유일한 최상위 객체를 의미하며 일반적으로 Browser-side에서는 window, Server-side(Node.js)에서는 global 객체를 의미한다.*
+*전역객체(Global Object)는 모든 객체의 유일한 최상위 객체를 의미하며 일반적으로 Browser-side 에서는 window, Server-side(Node.js)에서는 global 객체를 의미한다.*
 
     // in browser console
     this === window // true
@@ -175,7 +175,7 @@
     node
     this === global // true
 
- 기본적으로 this 는 전역객체(Global object)에 바인딩된다. 전역함수는 물론이고 심지어 내부함수의 경우도 this는 외부함수가 아닌 전역객체에 바인딩된다.
+ 기본적으로 this 는 전역객체(Global object)에 바인딩된다. 전역함수는 물론이고 심지어 내부함수의 경우도 this 는 외부함수가 아닌 전역객체에 바인딩된다.
     
     function foo() {
       console.log("foo's this: ",  this);  // window
@@ -247,10 +247,10 @@
     
  <img src="http://poiemaweb.com/img/Function_Invocation_Pattern.png">    
 
- 메소드 호출 패턴이든 함수 호출 패턴이든 내부함수의 this는 모두 전역객체에 바인딩된다. 이러한 문제를 해소하기 위해 자바스크립트는 this 바인딩을 명시적으로 할 수 있는 call, apply 메소드를 제공한다.
+ 메소드 호출 패턴이든 함수 호출 패턴이든 내부함수의 this 는 모두 전역객체에 바인딩된다. 이러한 문제를 해소하기 위해 자바스크립트는 this 바인딩을 명시적으로 할 수 있는 call, apply 메소드를 제공한다.
 
 ### 2. 메소드 호출 패턴 (Method Invocation Pattern)
-*함수가 객체의 프로퍼티이면 메소드 호출 패턴으로 호출된다. 이때 메소드 내부의 this는 해당 메소드를 소유한 객체 즉 해당 메소드를 호출한 객체에 바인딩된다.*
+*함수가 객체의 프로퍼티이면 메소드 호출 패턴으로 호출된다. 이때 메소드 내부의 this 는 해당 메소드를 소유한 객체 즉 해당 메소드를 호출한 객체에 바인딩된다.*
 
     var obj1 = {
       name: 'Lee',
@@ -270,7 +270,7 @@
 
  <img src="http://poiemaweb.com/img/Method_Invocation_Pattern.png">
 
- 프로토타입 객체도 메소드를 가질 수 있다. 프로토타입 객체 메소드 내부에서 사용된 this도 일반 메소드 방식과 마찬가지로 해당 메소드를 호출한 객체에 바인딩된다.    
+ 프로토타입 객체도 메소드를 가질 수 있다. 프로토타입 객체 메소드 내부에서 사용된 this 도 일반 메소드 방식과 마찬가지로 해당 메소드를 호출한 객체에 바인딩된다.    
 
     function Person(name) {
       this.name = name;
@@ -330,8 +330,8 @@
     
 *객체 리터럴 방식과 생성자 함수 방식의 차이는 프로토타입 객체([[prototype]])에 있다.*
 
-- 객체 리터럴 방식의 경우, 생성된 객체의 프로토타입 객체는 Object.prototype이다.
-- 생성자 함수 방식의 경우, 생성된 객체의 프로토타입 객체는 Person.prototype이다.
+- 객체 리터럴 방식의 경우, 생성된 객체의 프로토타입 객체는 Object.prototype 이다.
+- 생성자 함수 방식의 경우, 생성된 객체의 프로토타입 객체는 Person.prototype 이다.
 
 ##### 3.3 생성자 함수에 new 연산자를 붙이지 않고 호출할 경우
 *일반함수와 생성자 함수에 특별한 형식적 차이는 없으며 함수에 new 연산자를 붙여서 호출하면 해당 함수는 생성자 함수로 동작한다.*
@@ -362,7 +362,7 @@ this에 바인딩될 객체는 함수 호출 패턴에 의해 결정된다. 이�
     // thisArg: 함수 내부의 this에 바인딩할 객체
     // argsArray: 함수에 전달할 argument의 배열
 
-기억해야 할 것은 apply() 메소드를 호출하는 주체는 함수이며 apply() 메소드는 this를 특정 객체에 바인딩할 뿐 본질적인 기능은 함수 호출이라는 것이다.
+기억해야 할 것은 apply() 메소드를 호출하는 주체는 함수이며 apply() 메소드는 this 를 특정 객체에 바인딩할 뿐 본질적인 기능은 함수 호출이라는 것이다.
 
     var Person = function (name) {
       this.name = name;
@@ -483,9 +483,9 @@ apply()와 call() 메소드는 콜백 함수의 this 를 위해서 사용되기�
     console.log(!!{});        // true
     console.log(!![]);        // true
     
- 객체(배열 포함)의 경우 빈 객체라도 존재하기만하면 true로 변환된다.
+ 객체(배열 포함)의 경우 빈 객체라도 존재하기만하면 true 로 변환된다.
   
- 객체의 존재 확인 후 그 결과를 반환해야 하는 경우, !!를 사용하면 강제로 피연산자를 boolean으로 형 변환 할 수 있다.
+ 객체의 존재 확인 후 그 결과를 반환해야 하는 경우, !!를 사용하면 강제로 피연산자를 boolean 으로 형 변환 할 수 있다.
     
     var obj;
     console.log(!!obj); // false
@@ -494,8 +494,8 @@ apply()와 call() 메소드는 콜백 함수의 this 를 위해서 사용되기�
     console.log(!!obj); // true
     
 
- 아래 값들은 Boolean context에서 false로 평가된다.<ul><li>false</li><li>undefined</li><li>null</li><li>0</li><li>NaN (Not a Number)</li><li>'' (빈문자열)</li></ul>
-이들을 Falsy value라 한다.  
+ 아래 값들은 Boolean context 에서 false 로 평가된다.<ul><li>false</li><li>undefined</li><li>null</li><li>0</li><li>NaN (Not a Number)</li><li>'' (빈문자열)</li></ul>
+이들을 Falsy value 라 한다.  
 
 #
 
@@ -884,3 +884,32 @@ Primitives(기본자료형) 인수는 Call-by-value(값에 의한 호출)로 동
 - 함수는 반환을 생략할 수 있다. 이때 함수는 암묵적으로 undefined 를 반환한다.
 - 자바스크립트 해석기는 return 키워드를 만나면 함수의 실행을 중단한 후, 함수를 호출한 코드로 되돌아간다. 만일 return 키워드 이후에 다른 구문이 존재하면 그 구문은 실행되지 않는다.
 
+
+    function calculateArea(width, height) {
+      var area = width * height;
+      return area; // 단일 값의 반환
+    }
+    console.log(calculateArea(3, 5)); // 15
+    console.log(calculateArea(8, 5)); // 40
+    
+    function getSize(width, height, depth) {
+      var area = width * height;
+      var volume = width * height * depth;
+      return [area, volume]; // 복수 값의 반환
+    }
+    
+    console.log('area is ' + getSize(3, 2, 3)[0]);   // area is 6
+    console.log('volume is ' + getSize(3, 2, 3)[1]); // volume is 18
+    
+## 7. 함수 객체의 프로퍼티
+함수는 객체이다. 따라서 함수도 프로퍼티를 가질 수 있다.
+
+    function square(number) {
+      return number * number;
+    }
+    
+    square.x = 10;
+    square.y = 20;
+    
+    console.log(square.x, square.y);
+    
