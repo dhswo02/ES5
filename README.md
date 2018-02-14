@@ -913,3 +913,204 @@ Primitives(기본자료형) 인수는 Call-by-value(값에 의한 호출)로 동
     
     console.log(square.x, square.y);
     
+
+### 7.1 arguments 프로퍼티
+arguments 객체는 함수 호출 시 전달된 인수(argument)들의 정보를 담고 있는 순회가능한(iterable) 유사 배열 객체(array-like object)이다.
+ 
+함수 객체의 arguments 프로퍼티는 arguments 객체를 값으로 가지며 함수 내부에서 지역변수처럼 사용된다. 즉 함수 외부에서는 사용할 수 없다.
+
+매개변수(parameter)는 인수(argument)로 초기화된다.
+
+- 매개변수의 갯수보다 인수를 적게 전달했을 때(multiply(), multiply(1)) 인수가 전달되지 않은 매개변수는 undefined 으로 초기화된다.
+- 매개변수의 갯수보다 인수를 더 많이 전달한 경우, 초과된 인수는 무시된다.
+
+arguments 객체는 매개변수 갯수가 확정되지 않은 *가변 인자 함수*를 구현할 때 유용하게 사용된다.
+
+    function sum() {
+      var res = 0;
+    
+      for (var i = 0; i < arguments.length; i++) {
+        res += arguments[i];
+      }
+    
+      return res;
+    }
+    
+    console.log(sum());        // 0
+    console.log(sum(1, 2));    // 3
+    console.log(sum(1, 2, 3)); // 6
+    
+자바스크립트는 함수를 호출할 때 인수들과 함께 암묵적으로 arguments 객체가 함수 내부로 전달된다. arguments 객체는 배열의 형태로 인자값 정보를 담고 있지만 실제 배열이 아닌 *유사배열객체(array-like object)*이다.
+
+유사배열객체란 length 프로퍼티를 가진 객체를 말한다. 유사배열객체는 배열이 아니므로 배열 메소드를 사용하는 경우 에러가 발생하게 된다. 따라서 배열 메소드를 사용하려면 Function.prototype.call, Function.prototype.apply 를 사용하여야 하는 번거로움이 있다.
+
+    function sum() {
+      if (!arguments.length) return 0;
+    
+      // arguments 객체를 배열로 변환
+      var array = Array.prototype.slice.call(arguments);
+      return array.reduce(function (pre, cur) {
+        return pre + cur;
+      });
+    }
+    
+    // ES6
+    // function sum(...args) {
+    //   if (!args.length) return 0;
+    //   return args.reduce((pre, cur) => pre + cur);
+    // }
+    
+    console.log(sum(1, 2, 3, 4, 5)); // 15
+    
+### 7.2 caller 프로퍼티
+caller 프로퍼티는 자신을 호출한 함수를 의미한다.
+
+    function foo(func) {
+      var res = func();
+      return res;
+    }
+    
+    function bar() {
+      return 'caller : ' + bar.caller;
+    }
+    
+    console.log(foo(bar)); // function foo(func) {...}
+    console.log(bar());    // null (browser에서의 실행 결과)
+    
+### 7.3 length 프로퍼티
+length 프로퍼티는 함수 정의 시 작성된 매개변수 갯수를 의미한다.
+
+### 7.4 name 프로퍼티
+함수명을 나타낸다. 기명함수의 경우 함수명을 값으로 갖고 익명함수의 경우 빈문자열을 값으로 갖는다.
+
+    // 기명 함수표현식(named function expression)
+    var namedFunc = function multiply(a, b) {
+      return a * b;
+    };
+    // 익명 함수표현식(anonymous function expression)
+    var anonymousFunc = function(a, b) {
+      return a * b;
+    };
+    
+    console.log(namedFunc.name);     // multiply
+    console.log(anonymousFunc.name); // ''
+    
+### 7.5 \_\_proto\_\_ 프로퍼티
+ECMAScript spec 에서는 모든 객체는 자신의 프로토타입을 가리키는 \[\[Prototype\]\]이라는 숨겨진 프로퍼티를 가진다 라고 되어있다. 크롬, 파이어폭스 등에서는 숨겨진 \[\[Prototype\]\] 프로퍼티가 \_\_proto\_\_ 프로퍼티로 구현되어 있다. 즉 \_\_proto\_\_과 \[\[Prototype\]\]은 같은 개념이다.
+
+square() 함수 역시 객체이므로 \[\[Prototype\]\] 프로퍼티(\_\_proto\_\_ 프로퍼티)을 가지며 이를 통해 자신의 부모 역할을 하는 프로토타입 객체를 가리킨다.
+
+함수의 프로토타입 객체는 Function.prototype 이며 이것 역시 함수이다.
+
+    function square(number) {
+      return number * number;
+    }
+    
+    console.log(square.__proto__ === Function.prototype);
+    console.log(Object.getPrototypeOf(square) === Function.prototype);
+    
+### 7.6 prototype 프로퍼티
+함수 객체만이 가지고 있는 프로퍼티로 자바스크립트 객체지향의 근간이다.
+
+*주의해야 할 것은 함수 객체만이 가지고 있는 prototype 프로퍼티는 프로토타입 객체를 가리키는 \[\[Prototype\]\] 프로퍼티(\_\_proto\_\_ 프로퍼티)와는 다르다는 것이다.*
+
+prototype 프로퍼티와 \[\[Prototype\]\] 프로퍼티는 모두 프로토타입 객체를 가리키지만 관점의 차이가 있다.
+
+- \[\[Prototype\]\] 프로퍼티
+
+    - 모든 객체가 가지고 있는 프로퍼티이다.
+    - *객체의 입장에서 자신의 부모 역할을 하는 프로토타입 객체을 가리키며 함수 객체의 경우 Function.prototype 를 가리킨다.*
+    
+- prototype 프로퍼티
+
+    - 함수 객체만 가지고 있는 프로퍼티이다.
+    - *함수 객체가 생성자로 사용될 때 이 함수를 통해 생성된 객체의 부모 역할을 하는 객체를 가리킨다.*
+    - 함수가 생성될 때 만들어 지며 constructor 프로퍼티를 가지는 객체를 가리킨다. 이 constructor 프로퍼티는 함수 객체 자신을 가리킨다
+    
+<img src="http://poiemaweb.com/img/function_prototype.png" />
+
+*\[\[Prototype\]\] 프로퍼티는 함수 객체의 부모 객체(Function.prototype)를 가리키며 prototype 프로퍼티는 함수객체가 생성자 함수로 사용되어 객체를 생성할 때 생성된 객체의 부모 객체 역할을 하는 객체를 가리킨다.*
+
+## 8. 함수의 다양한 형태
+
+### 8.1 즉시호출함수표현식 (IIFE, Immediately Invoke Function Expression)
+함수의 정의와 동시에 실행되는 함수를 즉시호출함수라고 한다. 최초 한번만 호출되며 다시 호출할 수는 없다. 이러한 특징을 이용하여 최초 한번만 실행이 필요한 초기화 처리등에 사용할 수 있다.
+
+    // 기명 즉시실행함수(named immediately-invoked function expression)
+    (function myFunction() {
+      var a = 3;
+      var b = 5;
+      return a * b;
+    }());
+    
+    // 익명 즉시실행함수(immediately-invoked function expression)
+    (function () {
+      var a = 3;
+      var b = 5;
+      return a * b;
+    }());
+    
+자바스크립트에서 가장 큰 문제점 중의 하나는 파일이 분리되어 있다하여도 글로벌 스코프가 하나이며 글로벌 스코프에 선언된 변수나 함수는 코드 내의 어디서든지 접근이 가능하다는 것이다.
+
+따라서 다른 스크립트 파일 내에서 동일한 이름으로 명명된 변수나 함수가 같은 스코프 내에 존재할 경우 원치 않는 결과를 가져올 수 있다.
+
+즉시실행함수 내에 처리 로직을 모아 두면 혹시 있을 수도 있는 변수명 또는 함수명의 충돌을 방지할 수 있어 이를 위한 목적으로 즉시실행함수를 사용되기도 한다.
+
+### 8.2 내부 함수 (Inner function)
+함수 내부에 정의된 함수를 내부함수라 한다.
+
+아래 예제의 내부함수 child 는 자신을 포함하고 있는 부모함수 parent의 변수에 접근할 수 있다. 하지만 부모함수는 자식함수(내부함수)의 변수에 접근할 수 없다.
+
+    function parent(param) {
+      var parentVar = param;
+      function child() {
+        var childVar = 'lee';
+        console.log(parentVar + ' ' + childVar); // Hello lee
+      }
+      child();
+      console.log(parentVar + ' ' + childVar);
+      // Uncaught ReferenceError: childVar is not defined
+    }
+    parent('Hello');
+    
+또한 내부함수는 부모함수의 외부에서 접근할 수 없다.
+
+    function sayHello(name){
+      var text = 'Hello ' + name;
+      var logHello = function(){ console.log(text); }
+      logHello();
+    }
+    
+    sayHello('lee');  // Hello lee
+    logHello('lee');  // logHello is not defined
+    
+### 8.3 콜백 함수 (Callback function)
+콜백함수는 함수를 명시적으로 호출하는 방식이 아니라 특정 이벤트가 발생했을 때 시스템에 의해 호출되는 함수를 말한다.
+
+콜백함수가 자주 사용되는 대표적인 예는 이벤트 핸들러 처리이다.
+
+    <!DOCTYPE html>
+    <html>
+    <body>
+      <button id="myButton">Click me</button>
+      <script>
+        var button = document.getElementById('myButton');
+        button.addEventListener('click', function() {
+          console.log('button clicked!');
+        });
+      </script>
+    </body>
+    </html>
+    
+콜백함수는 콜백 큐에 들어가 있다가 해당 이벤트가 발생하면 호출된다. 콜백 함수는 클로저이므로 콜백 큐에 단독으로 존재하다가 호출되어도 콜백함수를 전달받은 함수의 변수에 접근할 수 있다.
+
+    function doSomething() {
+      var name = 'Lee';
+    
+      setTimeout(function () {
+        console.log('My name is ' + name);
+      }, 100);
+    }
+    
+    doSomething(); // My name is Lee
+    
